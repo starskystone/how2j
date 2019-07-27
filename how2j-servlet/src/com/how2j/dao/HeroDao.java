@@ -26,7 +26,6 @@ public class HeroDao implements IHeroDao{
 
 	@Override
 	public Hero select() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -76,13 +75,24 @@ public class HeroDao implements IHeroDao{
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(0, hero.getName());
 			ps.setInt(1, hero.hp);
+			ps.setInt(2, hero.getDamage());
+			ps.setInt(3, hero.id);
+			boolean b = ps.execute();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void delete(Hero hero) {
-		// TODO Auto-generated method stub
+		try {
+			String sql = "delete hero where id = "+ hero.getId();
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.execute();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 

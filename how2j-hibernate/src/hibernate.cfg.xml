@@ -21,5 +21,9 @@
  		<property name="hbm2ddl.auto">update</property>
  		<!-- 这表示Hibernate会去识别Product这个实体类 -->
  		<mapping resource="com/how2java/pojo/Product.hbm.xml" />
+ 		<mapping resource="com/how2java/pojo/Category.hbm.xml" />
+ 		
+ 		<property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 	</session-factory>
 </hibernate-configuration>

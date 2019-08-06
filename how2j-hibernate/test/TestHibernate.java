@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
+import com.how2java.pojo.Category;
 import com.how2java.pojo.Product;
 
 public class TestHibernate {
@@ -16,7 +17,13 @@ public class TestHibernate {
 		// delete();
 		// update();
 		//hqlSelect();
-		standardSql();
+		//standardSql();
+		//manyToOne();
+		//propertyLoad();
+		//lazyLoad();
+		//deleteCascade();
+		//sessionOne();
+		sessionTwo();
 	}
 
 	public static void select() {
@@ -116,16 +123,122 @@ public class TestHibernate {
 		s.beginTransaction();
 
 		String name = "iphone";
-		String sql = "select * from product_ p where p.name like '%" + name + "%'";
-		Query q = s.createQuery(sql);
+		String sql = "select * from product_ p where p.name like '%"+name+"%'";
+		Query q = s.createSQLQuery(sql);
 		List<Object[]> list = q.list();
 		for (Object[] obj : list) {
 			for (Object filed : obj) {
-				System.out.print(filed + "\t");
+				System.out.println(filed + "\t");
 			}
 		}
 		s.getTransaction().commit();
 		s.close();
 		sf.close();
 	}
-}
+	
+	/**
+	 * 测试many-to-one关系
+	 */
+	public static void manyToOne() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		
+		Category c = new Category();
+		c.setName("c1");
+		s.save(c);
+		
+		Product p = (Product) s.get(Product.class,8);
+		p.setCategory(c);
+		s.update(p);
+		
+		s.getTransaction().commit();
+		s.close();
+		sf.close();
+	}
+	
+	/**
+	 * hibernate属性的懒加载，在获取属性后去数据库内获得对象
+	 */
+	public static void propertyLoad() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		
+		Product p = (Product) s.load(Product.class, 1);
+		System.out.println("---------------1");
+		System.out.println(p.getName());
+		System.out.println("---------------2");
+		
+		s.getTransaction().commit();
+        s.close();
+        sf.close();
+	}
+	
+	public static void lazyLoad() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		 
+        Session s = sf.openSession();
+        s.beginTransaction();
+        Category c = (Category) s.get(Category.class, 1);
+ 
+        System.out.println("log1");
+        System.out.println(c.getProducts());
+        System.out.println("log1");
+ 
+        s.getTransaction().commit();
+        s.close();
+        sf.close();
+	}
+	/**
+	 * 级联，删除category数据product数据也会被删除
+	 */
+	public static void deleteCascade() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+        Session s = sf.openSession();
+        s.beginTransaction();
+        Category c = (Category) s.get(Category.class, 3);
+        s.delete(c);
+        s.getTransaction().commit();
+        s.close();
+        sf.close();
+	}
+	
+	/**
+	 * 1级缓存，默认开启
+	 */
+	public static void sessionOne() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Category c =(Category) s.get(Category.class, 1);
+		System.out.println(c.getName());
+		Category c2 =(Category) s.get(Category.class, 1);
+		System.out.println(c2.getName());
+		s.getTransaction().commit();
+		s.close();
+		sf.close();
+	}
+	
+	/**
+	 * 2级缓存
+	 */
+	public static void sessionTwo() {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session s = sf.openSession();
+		s.beginTransaction();
+		Category c1 =(Category) s.get(Category.class, 1);
+		System.out.println(c1.getName());
+		Category c2 =(Category) s.get(Category.class, 1);
+		System.out.println(c2.getName());
+		s.getTransaction().commit();
+        s.close();
+		
+		Session s2 = sf.openSession();
+		s2.beginTransaction();
+		Category c3 = (Category) s2.get(Category.class, 1);
+		System.out.println(c3.getName());
+		s2.getTransaction().commit();
+        s2.close();
+	}
+} 

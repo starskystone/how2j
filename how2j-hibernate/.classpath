@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="D:/BF/Desktop/jar包/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="D:/BF/Desktop/jar包/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="D:/BF/Desktop/jar包/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="D:/BF/Desktop/jar包/c3p0-0.9.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

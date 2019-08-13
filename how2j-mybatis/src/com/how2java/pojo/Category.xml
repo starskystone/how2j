@@ -7,4 +7,16 @@
 		<select id="listCategory" resultType="Category">
 			select * from category_
 		</select>
+		<insert id="insertCategory" parameterType="Category">
+			insert into category_ (name) values (#{name})
+		</insert>
+		<delete id="delCategory" parameterType="Category">
+			delete from category_ where name = #{name}
+		</delete>
+		<update id="updateCategory" parameterType="Category">
+			update category_ set name = #{name} where id = #{id}
+		</update>
+		<select id="getCategory" parameterType="_int" resultType="Category">
+			select * from category_ where id = #{id}
+		</select>
 	</mapper>

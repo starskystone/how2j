@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         </environment>
     </environments>
     <mappers>
+    	<mapper class="com.how2java.mapper.CategoryMapper"/>
         <mapper resource="com/how2java/pojo/Category.xml"/>
     </mappers>
 </configuration>
